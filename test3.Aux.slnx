@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="test3.Chrono/test3.Chrono.csproj" />
+  <Project Path="test3.Mail/test3.Mail.csproj" />
+  <Project Path="test3.Test/test3.Test.csproj" />
+</Solution>
