@@ -1,41 +1,82 @@
-﻿global using Serilog;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
+using test3.Common;
+using test3.DAL;
 
 namespace test3.Chrono
 {
-    /// <summary> 
-    /// App流程: App初始化 →
-    /// 
-    /// </summary>
-    internal class Program
+    public class Program
     {
-        static void Main(String[] args)
+        public static async Task Main(String[] args)
         {
-            try
-            {
+            var builder = Host.CreateApplicationBuilder(args);
 
-            }
-            catch (Exception ex)
-            {
-                if (AppRunner._loggerO != null) { AppRunner._loggerO!.Fatal(ex, "StatusCode = 5200, Message = App Error, ex = "); }
-                else
-                {
-                    Log.Logger = new LoggerConfiguration()
-                                    .WriteTo.Console(
-                                         outputTemplate: "{Timestamp:HH:mm} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
-                                     )
-                                    .WriteTo.File(
-                                         outputTemplate: "{Timestamp:HH:mm} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
-                                         path: "C:\\JiaFuHo - GF66\\Programs\\Others\\test3\\test3.Log\\test3.Aux\\test3.Chrono\\Log_.txt",
-                                         retainedFileCountLimit: null,
-                                         rollingInterval: RollingInterval.Day,
-                                         shared: true
-                                     )
-                                    .MinimumLevel.Verbose()
-                                    .CreateLogger();
+            #region Serilog
+            var logPath = builder.Configuration["LogPath"] ?? "C:\\JiaFuHo - GF66\\Programs\\Others\\test3\\test3.Log\\test3.Aux\\test3.Chrono\\Log_.txt";
 
-                    Log.Fatal(ex, "StatusCode = 5200, Message = App Error, ex = ");
-                }
-            }
+            Log.Logger = new LoggerConfiguration()
+                                   .WriteTo.Console(
+                                       outputTemplate: "{Timestamp:HH:mm} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                                       restrictedToMinimumLevel: LogEventLevel.Information
+                                   )
+                                   .WriteTo.Async(x => x.File(
+                                       outputTemplate: "{Timestamp:HH:mm} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                                       path: logPath,
+                                       retainedFileCountLimit: null,
+                                       rollingInterval: RollingInterval.Day,
+                                       shared: true
+                                   ))
+                                   .MinimumLevel.Verbose()
+                                   .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                                   .MinimumLevel.Override("System", LogEventLevel.Warning)
+                                   .CreateLogger();
+
+            builder.Services.AddSerilog();
+
+            _loggerX.Decorator = new LoggerConfiguration()
+                                                .WriteTo.Console(
+                                                     outputTemplate: "{Message:lj}{NewLine}",
+                                                     restrictedToMinimumLevel: LogEventLevel.Information
+                                                )
+                                                .WriteTo.File(
+                                                     outputTemplate: "{Message:lj}{NewLine}",
+                                                     path: logPath,
+                                                     retainedFileCountLimit: null,
+                                                     rollingInterval: RollingInterval.Day,
+                                                     shared: true
+                                                )
+                                                .MinimumLevel.Verbose()
+                                                .CreateLogger();
+            #endregion
+
+            #region Options
+            var opt = builder.Configuration.GetSection("SystemOptions") ?? throw new Exception("System Opt Error");
+
+            builder.Services.Configure<appS>(opt);
+            #endregion
+
+            #region BLL
+            builder.Services.AddTransient<appL>();
+            #endregion
+
+            #region DAL
+            var test3 = builder.Configuration.GetConnectionString("test3") ?? throw new Exception("System Para Error: test3 ConnStr");
+
+            builder.Services.ConnDB(test3);
+            #endregion
+
+            #region Controllers
+            builder.Services.AddTransient<appC>();
+            #endregion
+
+            var app = builder.Build();
+
+            var C = app.Services.GetRequiredService<appC>();
+
+            await C.Run();
         }
     }
 }

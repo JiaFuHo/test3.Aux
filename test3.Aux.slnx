@@ -1,4 +1,11 @@
 <Solution>
+  <Folder Name="/Common/">
+    <Project Path="../test3.Service/test3.Common/test3.Common.csproj" />
+    <Project Path="../test3.Service/test3.Dto/test3.Dto.csproj" />
+  </Folder>
+  <Folder Name="/DAL/">
+    <Project Path="../test3.Service/test3.DAL/test3.DAL.csproj" />
+  </Folder>
   <Project Path="test3.Chrono/test3.Chrono.csproj" />
   <Project Path="test3.Mail/test3.Mail.csproj" />
   <Project Path="test3.Test/test3.Test.csproj" />
