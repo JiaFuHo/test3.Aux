@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace test3.Chrono
+namespace test3.Test
 {
     public class appC
     {

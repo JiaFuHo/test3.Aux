@@ -36,7 +36,7 @@ namespace test3.Chrono
 
             builder.Services.AddSerilog();
 
-            _loggerX.Decorator = new LoggerConfiguration()
+            _logX.Decorator = new LoggerConfiguration()
                                                 .WriteTo.Console(
                                                      outputTemplate: "{Message:lj}{NewLine}",
                                                      restrictedToMinimumLevel: LogEventLevel.Information
@@ -55,7 +55,7 @@ namespace test3.Chrono
             #region Options
             var opt = builder.Configuration.GetSection("SystemOptions") ?? throw new Exception("System Opt Error");
 
-            builder.Services.Configure<appS>(opt);
+            builder.Services.Configure<appO>(opt);
             #endregion
 
             #region BLL

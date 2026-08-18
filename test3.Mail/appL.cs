@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using test3.DAL.test3.Context;
 
-namespace test3.Chrono
+namespace test3.Mail
 {
     public class appL
     {
