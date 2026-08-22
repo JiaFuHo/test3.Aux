@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using test3.Common;
 
 namespace test3.Chrono
 {
@@ -6,11 +7,11 @@ namespace test3.Chrono
     {
         #region Fields
         private readonly appL _logic;
-        private readonly ILogger<appL> _logO;
+        private readonly ILogger<appC> _logO;
         #endregion
 
         #region Constructor
-        public appC(appL logic, ILogger<appL> log)
+        public appC(appL logic, ILogger<appC> log)
         {
             _logic = logic;
             _logO = log;
@@ -19,7 +20,29 @@ namespace test3.Chrono
 
         public async Task Run()
         {
+            _logic.SetTitle();
 
+            var (status, SDate) = await _logic.ChkStatus();
+
+            if (status)
+            {
+                var statusB = await _logic.UpdateBorrow(SDate);
+                var statusN = await _logic.UpdateNotification(SDate);
+                var statusR = await _logic.UpdateReservation(SDate);
+
+                if (statusB && statusN)
+                {
+                    await _logic.UpdateSystemTime();
+
+                    _logO.LogInformation("Chrono更新成功");
+                    _logX.L1();
+                }
+            }
+            else
+            {
+                _logO.LogInformation("Chrono未更新，查有重複紀錄");
+                _logX.L1();
+            }
         }
     }
 }
