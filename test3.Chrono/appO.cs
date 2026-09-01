@@ -1,6 +1,6 @@
 ﻿namespace test3.Chrono
 {
-    public class appO
+    public class AppO
     {
         #region Fields
         private Int32? _interval = 14;

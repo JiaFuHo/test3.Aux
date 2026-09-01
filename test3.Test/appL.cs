@@ -4,20 +4,20 @@ using test3.DAL.test3.Context;
 
 namespace test3.Test
 {
-    public class appL
+    public class AppL
     {
         #region Fields
-        private readonly appO _opt;
-        private readonly ILogger<appL> _logO;
         private readonly test3Context _db;
+        private readonly AppO _opt;
+        private readonly ILogger<AppL> _logO;
         #endregion
 
         #region Constructor
-        public appL(ILogger<appL> log, IOptions<appO> opt, test3Context db)
+        public AppL(test3Context db, IOptions<AppO> opt, ILogger<AppL> log)
         {
-            _logO = log;
-            _opt = opt.Value;
             _db = db;
+            _opt = opt.Value;
+            _logO = log;
         }
         #endregion
 

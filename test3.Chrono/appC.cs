@@ -3,15 +3,15 @@ using test3.Common;
 
 namespace test3.Chrono
 {
-    public class appC
+    public class AppC
     {
         #region Fields
-        private readonly appL _logic;
-        private readonly ILogger<appC> _logO;
+        private readonly AppL _logic;
+        private readonly ILogger<AppC> _logO;
         #endregion
 
         #region Constructor
-        public appC(appL logic, ILogger<appC> log)
+        public AppC(AppL logic, ILogger<AppC> log)
         {
             _logic = logic;
             _logO = log;

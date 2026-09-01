@@ -37,29 +37,29 @@ namespace test3.Test
             builder.Services.AddSerilog();
 
             _logX.Decorator = new LoggerConfiguration()
-                                                .WriteTo.Console(
-                                                     outputTemplate: "{Message:lj}{NewLine}",
-                                                     restrictedToMinimumLevel: LogEventLevel.Information
-                                                )
-                                                .WriteTo.File(
-                                                     outputTemplate: "{Message:lj}{NewLine}",
-                                                     path: logPath,
-                                                     retainedFileCountLimit: null,
-                                                     rollingInterval: RollingInterval.Day,
-                                                     shared: true
-                                                )
-                                                .MinimumLevel.Verbose()
-                                                .CreateLogger();
+                                           .WriteTo.Console(
+                                                outputTemplate: "{Message:lj}{NewLine}",
+                                                restrictedToMinimumLevel: LogEventLevel.Information
+                                           )
+                                           .WriteTo.File(
+                                                outputTemplate: "{Message:lj}{NewLine}",
+                                                path: logPath,
+                                                retainedFileCountLimit: null,
+                                                rollingInterval: RollingInterval.Day,
+                                                shared: true
+                                           )
+                                           .MinimumLevel.Verbose()
+                                           .CreateLogger();
             #endregion
 
             #region Options
             var opt = builder.Configuration.GetSection("SystemOptions") ?? throw new Exception("System Opt Error");
 
-            builder.Services.Configure<appO>(opt);
+            builder.Services.Configure<AppO>(opt);
             #endregion
 
             #region BLL
-            builder.Services.AddTransient<appL>();
+            builder.Services.AddTransient<AppL>();
             #endregion
 
             #region DAL
@@ -69,12 +69,12 @@ namespace test3.Test
             #endregion
 
             #region Controllers
-            builder.Services.AddTransient<appC>();
+            builder.Services.AddTransient<AppC>();
             #endregion
 
             var app = builder.Build();
 
-            var C = app.Services.GetRequiredService<appC>();
+            var C = app.Services.GetRequiredService<AppC>();
 
             await C.Run();
         }

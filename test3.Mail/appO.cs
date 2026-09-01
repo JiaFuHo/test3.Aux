@@ -1,6 +1,6 @@
 ﻿namespace test3.Mail
 {
-    public class appO
+    public class AppO
     {
 
     }
