@@ -142,19 +142,19 @@ namespace test3.Chrono
         #region Aux Methods
         public void SetTitle()
         {
-            String title = "test3.Chrono";
+            var title = "test3.Chrono";
 
-            Int32 widthTotal = 75;
-            Int32 widthTitle = 0;
+            var widthTotal = 75;
+            var widthTitle = 0;
 
             foreach (var x in title) { widthTitle += (x > 127) ? 2 : 1; }
 
-            Int32 padT = widthTotal - 2 - widthTitle;
+            var padT = widthTotal - 2 - widthTitle;
 
             if (padT < 0) { padT = 0; }
 
-            Int32 padL = padT / 2;
-            Int32 padR = padT - padL;
+            var padL = padT / 2;
+            var padR = padT - padL;
 
             Console.WriteLine("╔" + new String('═', widthTotal - 2) + "╗");
             Console.WriteLine("║" + new String(' ', padL) + title + new String(' ', padR) + "║");
