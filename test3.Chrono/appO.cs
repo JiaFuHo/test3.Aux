@@ -3,11 +3,16 @@
     public class AppO
     {
         #region Fields
+        private String? _mode = "A";
         private Int32? _interval = 14;
         #endregion
 
         #region Properties
-        public String? Mode { get; set; } = "A";
+        public String? Mode
+        {
+            get => _mode;
+            set { if (!String.IsNullOrWhiteSpace(value)) { _mode = value; } }
+        }
         public Int32? Interval
         {
             get => _interval;
