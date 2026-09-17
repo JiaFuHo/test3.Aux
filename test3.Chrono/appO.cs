@@ -11,12 +11,12 @@
         public String? Mode
         {
             get => _mode;
-            set { if (!String.IsNullOrWhiteSpace(value)) { _mode = value; } }
+            set { if (value == "A" || value == "M") { _mode = value; } }
         }
         public Int32? Interval
         {
             get => _interval;
-            set => _interval = (value == null || value < 14) ? 14 : value;
+            set { if (value != null && value >= 14) { _interval = value; } }
         }
         #endregion
     }
