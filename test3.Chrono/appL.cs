@@ -40,7 +40,7 @@ namespace test3.Chrono
 
             var CDate = DateTime.Today;
 
-            var Interval = (_opt.Mode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
+            var Interval = (_opt.ExeMode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
 
             try
             {
@@ -73,7 +73,7 @@ namespace test3.Chrono
 
             var CDate = DateTime.Today;
 
-            var Interval = (_opt.Mode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
+            var Interval = (_opt.ExeMode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
 
             try
             {
@@ -104,7 +104,7 @@ namespace test3.Chrono
 
             var CDate = DateTime.Today;
 
-            var Interval = (_opt.Mode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
+            var Interval = (_opt.ExeMode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
 
             try
             {

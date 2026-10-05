@@ -3,15 +3,15 @@
     public class AppO
     {
         #region Fields
-        private String? _mode = "A";
+        private String? _exeMode = "A";
         private Int32? _interval = 14;
         #endregion
 
         #region Properties
-        public String? Mode
+        public String? ExeMode
         {
-            get => _mode;
-            set { if (value == "A" || value == "M") { _mode = value; } }
+            get => _exeMode;
+            set { if (value == "A" || value == "M") { _exeMode = value; } }
         }
         public Int32? Interval
         {
