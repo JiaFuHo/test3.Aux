@@ -15,7 +15,7 @@ namespace test3.Chrono
             var builder = Host.CreateApplicationBuilder(args);
 
             #region Serilog
-            var logPath = builder.Configuration["LogPath"] ?? "C:\\JiaFuHo - GF66\\Programs\\Others\\test3\\test3.Log\\test3.Aux\\test3.Chrono\\Log_.txt";
+            var logPath = builder.Configuration["LogPath"] ?? "C:\\JiaFuHo - GF66\\Programs\\Others\\test3\\04 test3.Log\\03 test3.Aux\\01 test3.Chrono\\Log_.txt";
 
             Log.Logger = new LoggerConfiguration()
                                    .WriteTo.Console(
