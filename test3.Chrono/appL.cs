@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using test3.DAL.test3.Context;
 using test3.DAL.test3.Models;
 
@@ -10,37 +9,60 @@ namespace test3.Chrono
     {
         #region Fields
         private readonly test3Context _db;
-        private readonly AppO _opt;
         private readonly ILogger<AppL> _logO;
         #endregion
 
         #region Constructor
-        public AppL(test3Context db, IOptions<AppO> opt, ILogger<AppL> log)
+        public AppL(test3Context db, ILogger<AppL> log)
         {
             _db = db;
-            _opt = opt.Value;
             _logO = log;
         }
         #endregion
 
         #region Methods
-        public async Task<(Boolean status, DateTime SDate)> ChkStatus()
+        public async Task<(Boolean status, Int32 interval)> ChkStatus()
         {
             var SDate = await _db.SystemTimes.OrderByDescending(x => x.Cdate).Select(x => x.Cdate).FirstOrDefaultAsync();
             var CDate = DateTime.Today;
 
-            var status = !(SDate == CDate);
+            var (status, interval) = (!(SDate == CDate), (CDate - SDate.Date).Days);
 
-            return (status, SDate);
+            return (status, interval);
         }
 
-        public async Task<Boolean> UpdateBorrow(DateTime SDate)
+        public async Task<Boolean> UpdateReservation(Int32 interval)
         {
             var (Status, StatusCode, Message) = (false, "", "");
 
-            var CDate = DateTime.Today;
+            try
+            {
+                var updateList = await _db.Reservations.ToListAsync();
 
-            var Interval = (_opt.ExeMode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
+                foreach (var item in updateList)
+                {
+                    item.ReservateDate = item.ReservateDate.AddDays(interval);
+                    item.DueDateR = (item.DueDateR.HasValue) ? item.DueDateR.Value.AddDays(interval) : null;
+                    item.Stime = DateTime.Now;
+                }
+
+                await _db.SaveChangesAsync();
+
+                (Status, StatusCode, Message) = (true, "2000", "");
+            }
+            catch (Exception ex)
+            {
+                (Status, StatusCode, Message) = (false, "5102", $"System Error: {ex.Message}");
+
+                _logO.LogError(ex, $"UpdateReservation錯誤 - StatusCode = {StatusCode}, Message = {Message}, ex = ");
+            }
+
+            return Status;
+        }
+
+        public async Task<Boolean> UpdateBorrow(Int32 interval)
+        {
+            var (Status, StatusCode, Message) = (false, "", "");
 
             try
             {
@@ -48,9 +70,10 @@ namespace test3.Chrono
 
                 foreach (var item in updateList)
                 {
-                    item.BorrowDate = item.BorrowDate.AddDays(Interval);
-                    item.DueDateB = item.DueDateB.AddDays(Interval);
-                    item.ReturnDate = (item.ReturnDate.HasValue) ? item.ReturnDate.Value.AddDays(Interval) : null;
+                    item.BorrowDate = item.BorrowDate.AddDays(interval);
+                    item.DueDateB = item.DueDateB.AddDays(interval);
+                    item.ReturnDate = (item.ReturnDate.HasValue) ? item.ReturnDate.Value.AddDays(interval) : null;
+                    item.Stime = DateTime.Now;
                 }
 
                 await _db.SaveChangesAsync();
@@ -67,13 +90,9 @@ namespace test3.Chrono
             return Status;
         }
 
-        public async Task<Boolean> UpdateNotification(DateTime SDate)
+        public async Task<Boolean> UpdateNotification(Int32 interval)
         {
             var (Status, StatusCode, Message) = (false, "", "");
-
-            var CDate = DateTime.Today;
-
-            var Interval = (_opt.ExeMode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
 
             try
             {
@@ -81,7 +100,9 @@ namespace test3.Chrono
 
                 foreach (var item in updateList)
                 {
-                    item.NotificationDate = item.NotificationDate.AddDays(Interval);
+                    item.NotificationDate = item.NotificationDate.AddDays(interval);
+                    item.IsRead = false;
+                    item.Stime = DateTime.Now;
                 }
 
                 await _db.SaveChangesAsync();
@@ -93,38 +114,6 @@ namespace test3.Chrono
                 (Status, StatusCode, Message) = (false, "5102", $"System Error: {ex.Message}");
 
                 _logO.LogError(ex, $"UpdateNotification錯誤 - StatusCode = {StatusCode}, Message = {Message}, ex = ");
-            }
-
-            return Status;
-        }
-
-        public async Task<Boolean> UpdateReservation(DateTime SDate)
-        {
-            var (Status, StatusCode, Message) = (false, "", "");
-
-            var CDate = DateTime.Today;
-
-            var Interval = (_opt.ExeMode == "A") ? (CDate - SDate).Days : (Int32)_opt.Interval!;
-
-            try
-            {
-                var updateList = await _db.Reservations.ToListAsync();
-
-                foreach (var item in updateList)
-                {
-                    item.ReservateDate = item.ReservateDate.AddDays(Interval);
-                    item.DueDateR = (item.DueDateR.HasValue) ? item.DueDateR.Value.AddDays(Interval) : null;
-                }
-
-                await _db.SaveChangesAsync();
-
-                (Status, StatusCode, Message) = (true, "2000", "");
-            }
-            catch (Exception ex)
-            {
-                (Status, StatusCode, Message) = (false, "5102", $"System Error: {ex.Message}");
-
-                _logO.LogError(ex, $"UpdateReservation錯誤 - StatusCode = {StatusCode}, Message = {Message}, ex = ");
             }
 
             return Status;

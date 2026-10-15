@@ -4,7 +4,7 @@
     {
         #region Fields
         private String? _exeMode = "A";
-        private Int32? _interval = 14;
+        private Int32? _interval = 7;
         #endregion
 
         #region Properties
@@ -16,7 +16,7 @@
         public Int32? Interval
         {
             get => _interval;
-            set { if (value != null && value >= 14) { _interval = value; } }
+            set { if (value != null && value >= 7) { _interval = value; } }
         }
         #endregion
     }
