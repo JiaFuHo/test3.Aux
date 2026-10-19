@@ -52,9 +52,9 @@ namespace test3.Chrono
             }
             catch (Exception ex)
             {
-                (Status, StatusCode, Message) = (false, "5102", $"System Error: {ex.Message}");
+                (Status, StatusCode, Message) = (false, "5102", "System Error");
 
-                _logO.LogError(ex, $"UpdateReservation錯誤 - StatusCode = {StatusCode}, Message = {Message}, ex = ");
+                _logO.LogError(ex, $"UpdateReservation錯誤 - StatusCode = {StatusCode}, Message = {Message}: {ex.Message}, ex = ");
             }
 
             return Status;
@@ -82,9 +82,9 @@ namespace test3.Chrono
             }
             catch (Exception ex)
             {
-                (Status, StatusCode, Message) = (false, "5102", $"System Error: {ex.Message}");
+                (Status, StatusCode, Message) = (false, "5102", "System Error");
 
-                _logO.LogError(ex, $"UpdateBorrow錯誤 - StatusCode = {StatusCode}, Message = {Message}, ex = ");
+                _logO.LogError(ex, $"UpdateBorrow錯誤 - StatusCode = {StatusCode}, Message = {Message}: {ex.Message}, ex = ");
             }
 
             return Status;
@@ -111,9 +111,9 @@ namespace test3.Chrono
             }
             catch (Exception ex)
             {
-                (Status, StatusCode, Message) = (false, "5102", $"System Error: {ex.Message}");
+                (Status, StatusCode, Message) = (false, "5102", "System Error");
 
-                _logO.LogError(ex, $"UpdateNotification錯誤 - StatusCode = {StatusCode}, Message = {Message}, ex = ");
+                _logO.LogError(ex, $"UpdateNotification錯誤 - StatusCode = {StatusCode}, Message = {Message}: {ex.Message}, ex = ");
             }
 
             return Status;
