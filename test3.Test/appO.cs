@@ -2,6 +2,12 @@
 {
     public class AppO
     {
+        #region Fields
 
+        #endregion
+
+        #region Properties
+
+        #endregion
     }
 }

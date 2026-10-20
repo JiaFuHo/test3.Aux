@@ -33,7 +33,7 @@ namespace test3.Chrono
 
         public async Task<Boolean> UpdateReservation(Int32 interval)
         {
-            var (Status, StatusCode, Message) = (false, "", "");
+            var (status, statusCode, message) = (false, "", "");
 
             try
             {
@@ -48,21 +48,21 @@ namespace test3.Chrono
 
                 await _db.SaveChangesAsync();
 
-                (Status, StatusCode, Message) = (true, "2000", "");
+                (status, statusCode, message) = (true, "2000", "");
             }
             catch (Exception ex)
             {
-                (Status, StatusCode, Message) = (false, "5102", "System Error");
+                (status, statusCode, message) = (false, "5102", "System Error");
 
-                _logO.LogError(ex, $"UpdateReservation錯誤 - StatusCode = {StatusCode}, Message = {Message}: {ex.Message}, ex = ");
+                _logO.LogError(ex, $"UpdateReservation錯誤 - StatusCode = {statusCode}, Message = {message}: {ex.Message}, ex = ");
             }
 
-            return Status;
+            return status;
         }
 
         public async Task<Boolean> UpdateBorrow(Int32 interval)
         {
-            var (Status, StatusCode, Message) = (false, "", "");
+            var (status, statusCode, message) = (false, "", "");
 
             try
             {
@@ -78,21 +78,21 @@ namespace test3.Chrono
 
                 await _db.SaveChangesAsync();
 
-                (Status, StatusCode, Message) = (true, "2000", "");
+                (status, statusCode, message) = (true, "2000", "");
             }
             catch (Exception ex)
             {
-                (Status, StatusCode, Message) = (false, "5102", "System Error");
+                (status, statusCode, message) = (false, "5102", "System Error");
 
-                _logO.LogError(ex, $"UpdateBorrow錯誤 - StatusCode = {StatusCode}, Message = {Message}: {ex.Message}, ex = ");
+                _logO.LogError(ex, $"UpdateBorrow錯誤 - StatusCode = {statusCode}, Message = {message}: {ex.Message}, ex = ");
             }
 
-            return Status;
+            return status;
         }
 
         public async Task<Boolean> UpdateNotification(Int32 interval)
         {
-            var (Status, StatusCode, Message) = (false, "", "");
+            var (status, statusCode, message) = (false, "", "");
 
             try
             {
@@ -107,16 +107,16 @@ namespace test3.Chrono
 
                 await _db.SaveChangesAsync();
 
-                (Status, StatusCode, Message) = (true, "2000", "");
+                (status, statusCode, message) = (true, "2000", "");
             }
             catch (Exception ex)
             {
-                (Status, StatusCode, Message) = (false, "5102", "System Error");
+                (status, statusCode, message) = (false, "5102", "System Error");
 
-                _logO.LogError(ex, $"UpdateNotification錯誤 - StatusCode = {StatusCode}, Message = {Message}: {ex.Message}, ex = ");
+                _logO.LogError(ex, $"UpdateNotification錯誤 - StatusCode = {statusCode}, Message = {message}: {ex.Message}, ex = ");
             }
 
-            return Status;
+            return status;
         }
 
         public async Task UpdateSystemTime()
