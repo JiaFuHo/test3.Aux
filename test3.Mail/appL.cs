@@ -46,7 +46,12 @@ namespace test3.Mail
 
                 if (line == null) { break; }
 
-                if (line.Contains("[ERR]")) { ErrList.Add(ParseErr(line)); }
+                if (line.Contains("[ERR]"))
+                {
+                    var Err = ParseErr(line);
+
+                    if (Err != null) { ErrList.Add(Err); }
+                }
             }
 
             if (ErrList.Count > 0)
@@ -127,6 +132,8 @@ namespace test3.Mail
 
                 _logO.LogInformation($"GetMailList完成 - StatusCode = {Res.StatusCode}, Message = {Res.Message}");
                 _logX.L1();
+
+                return Res;
             }
 
             try
@@ -177,6 +184,8 @@ namespace test3.Mail
 
                 _logO.LogInformation($"GetNtfyList完成 - StatusCode = {Res.StatusCode}, Message = {Res.Message}");
                 _logX.L1();
+
+                return Res;
             }
 
             try
@@ -358,17 +367,21 @@ namespace test3.Mail
 
             var updateSrc = _db.SystemLogs.Where(x => IdList.Contains(x.ErrId));
 
-            if (updateSrc == null)
+            if (!await updateSrc.AnyAsync())
             {
                 (statusCode, message) = ("4004", "查無相關紀錄");
 
                 _logO.LogWarning($"UpdateLog失敗 - StatusCode = {statusCode}, Message = {message}");
                 _logX.L1();
+
+                return;
             }
 
             try
             {
-                foreach (var x in updateSrc!)
+                var updateList = await updateSrc.ToListAsync();
+
+                foreach (var x in updateList)
                 {
                     x.IsMailed = true;
                     x.Mtime = DateTime.Now;
@@ -396,16 +409,20 @@ namespace test3.Mail
 
             var updateSrc = _db.Notifications.Where(x => IdList.Contains(x.NotificationId));
 
-            if (updateSrc == null)
+            if (!await updateSrc.AnyAsync())
             {
                 (statusCode, message) = ("4004", "查無相關紀錄");
 
                 _logO.LogWarning($"UpdateMsg失敗 - StatusCode = {statusCode}, Message = {message}");
+
+                return;
             }
 
             try
             {
-                foreach (var x in updateSrc!)
+                var updateList = await updateSrc.ToListAsync();
+
+                foreach (var x in updateList)
                 {
                     x.IsNotified = true;
                     x.Ntime = DateTime.Now;
@@ -448,7 +465,7 @@ namespace test3.Mail
             Console.WriteLine("╚" + new String('═', widthTotal - 2) + "╝");
         }
 
-        private ErrInfo ParseErr(String line)
+        private ErrInfo? ParseErr(String line)
         {
             var Err = new ErrInfo();
 
@@ -463,6 +480,7 @@ namespace test3.Mail
                 Err.StatusCode = match.Groups["StatusCode"].Value;
                 Err.Message = match.Groups["Message"].Value;
             }
+            else { return null; }
 
             return Err;
         }
