@@ -13,15 +13,15 @@
             get => _mailName;
             set { if (!String.IsNullOrWhiteSpace(value)) { _mailName = value; } }
         }
-        public String? MailAcc { get; set; }
-        public String? MailPwd { get; set; }
         public String? MailHost { get; set; }
         public Int32? MailPort
         {
             get => _mailPort;
             set { if (value == 465 || value == 587) { _mailPort = value; } }
         }
-        public List<MailInfo> MailList { get; set; } = new();
+        public String? MailAcc { get; set; }
+        public String? MailPwd { get; set; }
+        public List<MailInfoX> MailList { get; set; } = new();
         public String? LogPathS { get; set; }
         #endregion
     }

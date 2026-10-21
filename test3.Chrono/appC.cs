@@ -49,14 +49,9 @@ namespace test3.Chrono
                     await _logic.UpdateSystemTime();
 
                     _logO.LogInformation("Chrono更新成功");
-                    _logX.L1();
                 }
             }
-            else
-            {
-                _logO.LogWarning("Chrono未更新，查有重複紀錄");
-                _logX.L1();
-            }
+            else { _logO.LogWarning("Chrono未更新，查有重複紀錄"); }
         }
     }
 }

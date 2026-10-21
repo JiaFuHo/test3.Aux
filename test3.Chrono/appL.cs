@@ -48,7 +48,7 @@ namespace test3.Chrono
 
                 await _db.SaveChangesAsync();
 
-                (status, statusCode, message) = (true, "2000", "");
+                (status, statusCode, message) = (true, "2000", "更新成功");
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ namespace test3.Chrono
 
                 await _db.SaveChangesAsync();
 
-                (status, statusCode, message) = (true, "2000", "");
+                (status, statusCode, message) = (true, "2000", "更新成功");
             }
             catch (Exception ex)
             {
@@ -100,14 +100,14 @@ namespace test3.Chrono
 
                 foreach (var item in updateList)
                 {
-                    item.NotificationDate = item.NotificationDate.AddDays(interval);
+                    item.Ntime = (item.Ntime.HasValue) ? item.Ntime.Value.AddDays(interval) : null;
                     item.IsRead = false;
                     item.Stime = DateTime.Now;
                 }
 
                 await _db.SaveChangesAsync();
 
-                (status, statusCode, message) = (true, "2000", "");
+                (status, statusCode, message) = (true, "2000", "更新成功");
             }
             catch (Exception ex)
             {
