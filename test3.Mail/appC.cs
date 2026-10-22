@@ -32,7 +32,6 @@ namespace test3.Mail
             if (ErrList.Count > 0) { await _logic.CreateLog(ErrList); }
 
             var MailRes = await _logic.GetMailList();
-            var NtfyRes = await _logic.GetNtfyList();
 
             if (MailRes.Status)
             {
@@ -40,6 +39,8 @@ namespace test3.Mail
 
                 if (status) { await _logic.UpdateLog(MailRes.MailList!.Select(x => (Int32)x.ErrId!).ToList()); }
             }
+
+            var NtfyRes = await _logic.GetNtfyList();
 
             if (NtfyRes.Status)
             {

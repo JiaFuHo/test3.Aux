@@ -227,21 +227,21 @@ namespace test3.Mail
 
             try
             {
-                using var smtp = new SmtpClient();
+                using var smtp = new SmtpClient { CheckCertificateRevocation = false };
 
                 await smtp.ConnectAsync(_opt.MailHost!, (Int32)_opt.MailPort!, SecureSocketOptions.Auto);
                 await smtp.AuthenticateAsync(_opt.MailAcc!, _opt.MailPwd!);
 
-                var email = new MimeMessage
-                {
-                    From = { new MailboxAddress(_opt.MailName!, _opt.MailAcc!) },
-                    Subject = "【test3.Mail】系統信",
-                };
-
-                foreach (var x in _opt.MailList) { email.To.Add(new MailboxAddress(x.Name!, x.Email!)); }
-
                 foreach (var x in MailList)
                 {
+                    var email = new MimeMessage
+                    {
+                        From = { new MailboxAddress(_opt.MailName!, _opt.MailAcc!) },
+                        Subject = "【test3.Mail】系統信",
+                    };
+
+                    foreach (var y in _opt.MailList) { email.To.Add(new MailboxAddress(y.Name!, y.Email!)); }
+
                     email.Body = new BodyBuilder
                     {
                         HtmlBody = $@"<div style='text-align: center; margin-top: 1rem'>
@@ -304,7 +304,7 @@ namespace test3.Mail
 
             try
             {
-                using var smtp = new SmtpClient();
+                using var smtp = new SmtpClient { CheckCertificateRevocation = false };
 
                 await smtp.ConnectAsync(_opt.MailHost!, (Int32)_opt.MailPort!, SecureSocketOptions.Auto);
                 await smtp.AuthenticateAsync(_opt.MailAcc!, _opt.MailPwd!);
