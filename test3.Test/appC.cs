@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using test3.Common;
 
 namespace test3.Test
 {
@@ -26,30 +25,58 @@ namespace test3.Test
             if (String.IsNullOrWhiteSpace(_opt.TestAcc)) { throw new Exception("System Para Error: TestAcc"); }
             if (String.IsNullOrWhiteSpace(_opt.TestPwd)) { throw new Exception("System Para Error: TestPwd"); }
 
-            _logic.SetTitle();
+            if (String.IsNullOrWhiteSpace(_opt.TestTypeId)) { throw new Exception("System Para Error: TestTypeId"); }
+
+            var testPlan = _logic.GetPlan();
 
             while (true)
             {
-                var input = _logic.IptChk("123");
+                var testSuite = _logic.GetSuite(testPlan);
 
-                if (input == "Q") { break; }
+                if (testSuite == null) { break; }
+
+                if (testSuite.Any(x => !String.IsNullOrWhiteSpace(x.Attr!.Suite)))
+                {
+                    if (testSuite.Any(x => !String.IsNullOrWhiteSpace(x.Attr!.Feature)))
+                    {
+                        while (true)
+                        {
+                            var testFeature = _logic.GetFeature(testSuite);
+
+                            if (testFeature == null) { break; }
+
+                            while (true)
+                            {
+                                var testCase = _logic.GetCase(testFeature);
+
+                                if (testCase == null) { break; }
+
+                                _logic.Test(testCase);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        while (true)
+                        {
+                            var testCase = _logic.GetCase(testSuite);
+
+                            if (testCase == null) { break; }
+
+                            _logic.Test(testCase);
+                        }
+                    }
+                }
                 else
                 {
-                    try
+                    while (true)
                     {
-                        _logic.Setup();
-                        _logic.Login();
+                        var testScenario = _logic.GetScenario(testSuite);
 
-                        _logic.PilotToInfo();
-                        //_logic.DeleteFav();
-                        _logic.CreateFav();
+                        if (testScenario == null) { break; }
 
-                        Console.WriteLine("\n按任意鍵繼續...");
-                        Console.ReadKey();
-
-                        _logX.L1();
+                        _logic.Test(testScenario);
                     }
-                    finally { _logic.Teardown(); }
                 }
             }
         }
