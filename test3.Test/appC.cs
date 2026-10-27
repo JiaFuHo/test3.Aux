@@ -33,7 +33,7 @@ namespace test3.Test
             {
                 var testSuite = _logic.GetSuite(testPlan);
 
-                if (testSuite == null) { break; }
+                if (testSuite == null) { continue; }
 
                 if (testSuite.Any(x => !String.IsNullOrWhiteSpace(x.Attr!.Suite)))
                 {
