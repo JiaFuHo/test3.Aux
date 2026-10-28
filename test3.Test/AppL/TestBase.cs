@@ -5,6 +5,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System.Reflection;
+using test3.Common;
 using test3.DAL.test3.Context;
 
 namespace test3.Test
@@ -240,6 +241,8 @@ namespace test3.Test
             {
                 Console.WriteLine("\n按任意鍵繼續...");
                 Console.ReadKey();
+
+                _logX.L1();
 
                 Teardown();
             }
